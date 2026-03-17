@@ -79,7 +79,7 @@ show_hint = st.checkbox("Show hint", value=True, key="show_hint")
 
 # FIXME: st.rerun() cleared the hint before it could display. Fixed by storing
 # the hint in session state so it persists across the rerun.
-if show_hint and st.session_state.last_hint:
+if show_hint and st.session_state.last_hint and st.session_state.status == "playing":
     st.warning(st.session_state.last_hint)
 
 with st.form("guess_form"):
@@ -149,21 +149,14 @@ if submit:
         # FIXME: st.rerun() after a win/loss wiped the render before the status
         # block could fire, requiring a second button press.
         if outcome == "Win":
-            st.balloons()
             st.session_state.status = "won"
-            st.success(
-                f"You won! The secret was {st.session_state.secret}. "
-                f"Final score: {st.session_state.score} — Start a new game to play again."
-            )
-            st.stop()
+            st.session_state.last_hint = None
+            st.rerun()
         else:
             if st.session_state.attempts >= attempt_limit:
                 st.session_state.status = "lost"
-                st.error(
-                    f"Out of attempts! The secret was {st.session_state.secret}. "
-                    f"Score: {st.session_state.score} — Start a new game to try again."
-                )
-                st.stop()
+                st.session_state.last_hint = None
+                st.rerun()
             else:
                 # FIXME: History, score, and attempts left all showed stale values
                 # because display elements render before submit processing. A rerun
