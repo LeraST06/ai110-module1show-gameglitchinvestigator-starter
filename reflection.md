@@ -25,9 +25,7 @@ I used Claude on this project. For the correct suggestion: Claude identified and
   and what it showed you about your code.
 - Did AI help you design or understand any tests? How?
 
-I decided a bug was fixed when I could play through the game without the bad behavior happening — for example, submitting a correct guess and seeing the win screen on the first press, or typing a wrong answer and seeing the right hint direction. For pytest, Claude helped write tests in `tests/test_game_logic.py` targeting the specific bugs: `test_too_high_hint_says_go_lower` checks that a guess above the secret returns a message containing "LOWER", and `test_too_low_hint_says_go_higher` checks the opposite — these directly caught the backwards hints bug. Another test, `test_first_win_score_uses_attempt_1`, confirmed the attempts counter fix by verifying the correct points are awarded on the first guess. I also caught bugs manually that tests couldn't easily cover, like the double-press issue and the hints disappearing, which I found by just playing the game after each change. Claude also pointed out that the existing starter tests were broken because they compared `check_guess` results to plain strings, but the function returns a tuple — fixing that was the first thing needed before the tests were useful at all.
-
----
+I decided a bug was fixed when I could play through the game without the bad behavior happening. For pytest, Claude helped write tests in `tests/test_game_logic.py` targeting the specific bugs. For example, `test_too_high_hint_says_go_lower` checks that a guess above the secret returns a message containing "LOWER". I also caught bugs manually that tests couldn't easily cover, like the double-press issue and the hints disappearing, which I found by just playing the game after each change. Claude also pointed out that the existing starter tests were broken because they compared `check_guess` results to plain strings, but the function returns a tuple.
 
 ## 4. What did you learn about Streamlit and state?
 
