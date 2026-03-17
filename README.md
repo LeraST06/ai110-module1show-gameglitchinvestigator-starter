@@ -51,7 +51,7 @@ It wrote the code, ran away, and now the game is unplayable.
 
 ## 📸 Demo
 
-- ![Winning game screenshot](screenshot.png)
+- ![Winning game screenshot](Screenshot.png)
 
 ## 🚀 Stretch Features
 
