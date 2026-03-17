@@ -8,7 +8,7 @@ Answer each question in 3 to 5 sentences. Be specific and honest about what actu
 - List at least two concrete bugs you noticed at the start  
   (for example: "the secret number kept changing" or "the hints were backwards").
 
----
+When I just ran the game, it looked fine, but as I started playing, I noticed multiple glitches. The first bug I notices was that the hints were backwards. Another bug I notices was that the restart button was not working. Also, the attempts counter is not working properly either.
 
 ## 2. How did you use AI as a teammate?
 
@@ -16,7 +16,7 @@ Answer each question in 3 to 5 sentences. Be specific and honest about what actu
 - Give one example of an AI suggestion that was correct (including what the AI suggested and how you verified the result).
 - Give one example of an AI suggestion that was incorrect or misleading (including what the AI suggested and how you verified the result).
 
----
+I used Claude on this project. For the correct suggestion: Claude identified and fixed multiple bugs: the backwards hints in `check_guess`, the attempts counter starting at 1 instead of 0, the New Game button not resetting game status, the double-press issue caused by Streamlit's form rerun behavior, invalid guesses counting as attempts, the score rewarding wrong guesses, and stale display values for history and attempts left. I verified each fix by playing the game and running pytest, and all tests passed. For the misleading suggestion: while fixing the stale display values, Claude added `st.rerun()` after each guess, which accidentally caused hints to stop showing after the first guess. I noticed this while playing and Claude then fixed it by storing the hint in `st.session_state` so it survived the rerun.
 
 ## 3. Debugging and testing your fixes
 
@@ -24,6 +24,8 @@ Answer each question in 3 to 5 sentences. Be specific and honest about what actu
 - Describe at least one test you ran (manual or using pytest)  
   and what it showed you about your code.
 - Did AI help you design or understand any tests? How?
+
+I decided a bug was fixed when I could play through the game without the bad behavior happening — for example, submitting a correct guess and seeing the win screen on the first press, or typing a wrong answer and seeing the right hint direction. For pytest, Claude helped write tests in `tests/test_game_logic.py` targeting the specific bugs: `test_too_high_hint_says_go_lower` checks that a guess above the secret returns a message containing "LOWER", and `test_too_low_hint_says_go_higher` checks the opposite — these directly caught the backwards hints bug. Another test, `test_first_win_score_uses_attempt_1`, confirmed the attempts counter fix by verifying the correct points are awarded on the first guess. I also caught bugs manually that tests couldn't easily cover, like the double-press issue and the hints disappearing, which I found by just playing the game after each change. Claude also pointed out that the existing starter tests were broken because they compared `check_guess` results to plain strings, but the function returns a tuple — fixing that was the first thing needed before the tests were useful at all.
 
 ---
 
