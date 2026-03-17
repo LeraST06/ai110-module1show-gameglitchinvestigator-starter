@@ -33,6 +33,8 @@ I decided a bug was fixed when I could play through the game without the bad beh
 - How would you explain Streamlit "reruns" and session state to a friend who has never used Streamlit?
 - What change did you make that finally gave the game a stable secret number?
 
+The secret number kept changing because `random.randint()` was called at the top of the script every time Streamlit reran the page — and Streamlit reruns the entire script on every user interaction like a button click. So each click generated a brand new secret number. Streamlit "reruns" are like refreshing the page from scratch every time you do anything; session state is a way to save values so they survive those refreshes. The fix was wrapping the secret generation in `if "secret" not in st.session_state`, so it only runs once at the start of a session and stays the same for the rest of the game.
+
 ---
 
 ## 5. Looking ahead: your developer habits
@@ -41,3 +43,5 @@ I decided a bug was fixed when I could play through the game without the bad beh
   - This could be a testing habit, a prompting strategy, or a way you used Git.
 - What is one thing you would do differently next time you work with AI on a coding task?
 - In one or two sentences, describe how this project changed the way you think about AI generated code.
+
+One habit I want to keep is asking AI to explain the bug and its cause before jumping straight to a fix — that way I actually understand what changed instead of just accepting code. Next time I would also ask for more in-depth comments in the code so I don't forget what each fix does later. Honestly, my view of AI-generated code hasn't changed much since I already use AI tools a lot, but this was my first time using Claude Code directly inside VS Code and it saved a huge amount of time — having it built into the editor instead of switching between tabs made the whole debugging process much faster.

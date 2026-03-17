@@ -25,9 +25,29 @@ It wrote the code, ran away, and now the game is unplayable.
 
 ## 📝 Document Your Experience
 
-- [ ] Describe the game's purpose.
-- [ ] Detail which bugs you found.
-- [ ] Explain what fixes you applied.
+**Purpose:** A number guessing game where the player tries to guess a secret number within a limited number of attempts, with hints and a score system.
+
+**Bugs found:**
+- Hints were backwards — "Go HIGHER!" showed when the guess was too high
+- New Game button did not reset game status, leaving the game stuck after a win or loss
+- Attempts counter started at 1 instead of 0, making the first attempt display incorrectly
+- Every guess from the 2nd onward required two button presses due to a Streamlit form rerun issue
+- Invalid guesses (empty input, non-numbers) incorrectly consumed an attempt
+- Score rewarded wrong guesses (+5 on even attempts for "Too High")
+- History, score, and attempts left showed stale values until the next guess
+- Hints disappeared after the first guess once `st.rerun()` was added
+
+**Fixes applied:**
+- Swapped the hint messages in `check_guess` in `logic_utils.py`
+- Reset all session state fields (status, score, history, hint) in the New Game handler
+- Changed attempts initialization from 1 to 0
+- Wrapped the text input and submit button in `st.form` to batch interactions into one rerun
+- Moved the attempts increment inside the valid-guess branch
+- Removed the even/odd scoring branch so all wrong guesses deduct 5 points consistently
+- Added `st.rerun()` after each normal guess to refresh display values immediately
+- Stored the hint in `st.session_state.last_hint` so it persists across reruns
+- Added `max(0, ...)` floor to prevent score from going negative
+- Refactored all game logic into `logic_utils.py` and added pytest coverage
 
 ## 📸 Demo
 
